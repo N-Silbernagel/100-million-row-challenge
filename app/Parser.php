@@ -26,8 +26,7 @@ final class Parser
 
             $output[$path] ??= [];
 
-            $date = new DateTimeImmutable($dateInput);
-            $formattedDate = $date->format('Y-m-d');
+            $formattedDate = $this->parseDate($dateInput);
             $output[$path][$formattedDate] ??= 0;
             $output[$path][$formattedDate]++;
         }
@@ -43,5 +42,10 @@ final class Parser
     private function parsePathFromUrl(string $urlInput): mixed
     {
         return parse_url($urlInput, PHP_URL_PATH);
+    }
+
+    private function parseDate(string $dateInput): string
+    {
+        return substr($dateInput, 0, 10);
     }
 }
