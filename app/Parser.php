@@ -12,7 +12,6 @@ final class Parser
      */
     public function parse(string $inputPath, string $outputPath): void
     {
-        ini_set('memory_limit','16G');
         $output = [];
 
         $input = fopen($inputPath, 'r');
