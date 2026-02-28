@@ -41,9 +41,8 @@ final class Parser
         file_put_contents($outputPath, $json);
     }
 
-    private function parsePathFromUrl(mixed $urlInput): mixed
+    private function parsePathFromUrl(string $urlInput): mixed
     {
-        $parsedUrl = parse_url($urlInput);
-        return $parsedUrl['path'];
+        return parse_url($urlInput, PHP_URL_PATH);
     }
 }
