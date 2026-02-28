@@ -17,16 +17,17 @@ final class Parser
 
         $input = fopen($inputPath, 'r');
 
+        $paths = [];
+
         while ($csvRow = fgetcsv($input, escape: '')) {
             $urlInput = $csvRow[0];
             $dateInput = $csvRow[1];
 
-            $date = new DateTimeImmutable($dateInput);
-            $parsedUrl = parse_url($urlInput);
-            $path = $parsedUrl['path'];
+            $path = $paths[$urlInput] ??= $this->parsePathFromUrl($urlInput);
 
             $output[$path] ??= [];
 
+            $date = new DateTimeImmutable($dateInput);
             $formattedDate = $date->format('Y-m-d');
             $output[$path][$formattedDate] ??= 0;
             $output[$path][$formattedDate]++;
@@ -38,5 +39,11 @@ final class Parser
 
         $json = json_encode($output, flags: JSON_PRETTY_PRINT);
         file_put_contents($outputPath, $json);
+    }
+
+    private function parsePathFromUrl(mixed $urlInput): mixed
+    {
+        $parsedUrl = parse_url($urlInput);
+        return $parsedUrl['path'];
     }
 }
