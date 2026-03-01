@@ -27,21 +27,17 @@ final class Parser
             $outputData[$path][$date]++;
         }
 
-        foreach ($outputData as &$data) {
-            ksort($data);
-        }
-
         $output = fopen('php://memory', 'w');
-        stream_set_read_buffer($output, 4 * 2 ^ 10 * 2 ^ 10);
 
         fwrite($output, "{" . PHP_EOL);
 
         $totalPathsCount = count($outputData);
         $pathIndex = 0;
-        foreach ($outputData as $path => $pathCounts) {
+        foreach ($outputData as $path => &$pathCounts) {
             $escapedPath = str_replace('/', '\/', $path);
             fwrite($output, "    \"$escapedPath\": {" . PHP_EOL);
 
+            ksort($pathCounts);
             $totalDatesCount = count($pathCounts);
             $dateIndex = 0;
             foreach ($pathCounts as $date => $count) {
