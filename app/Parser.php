@@ -3,7 +3,6 @@
 namespace App;
 
 use function array_fill;
-use function fgets;
 use function file_put_contents;
 use function fopen;
 use function gc_disable;
@@ -12,6 +11,8 @@ use function substr;
 
 final class Parser
 {
+    const int FILE_READ_SIZE = 4_194_304;
+
     /**
      * @throws \DateMalformedStringException
      */
@@ -50,27 +51,38 @@ final class Parser
 
         // parse input
         $input = fopen($inputPath, 'r');
-        stream_set_read_buffer($input, 4_194_304);
+        stream_set_read_buffer($input, self::FILE_READ_SIZE);
 
-        while ($line = fgets($input)) {
-            // we know url path is 19 chars from left, because host and protocol stay the same
-            // and each line ends with ",YYYY-MM-DDTHH:MM:SS+00:00"
-            $path = substr($line, 25, -27);
-            $date = substr($line, -24, 8);
+        $position = 25;
+        $back = 0;
+        while (feof($input) === false) {
+            fseek($input, $back, SEEK_CUR);
+            $buffer = fread($input, self::FILE_READ_SIZE);
+            $lastEol = strrpos($buffer, PHP_EOL);
+            $back = ftell($input) - $lastEol;
 
-            // use dateIds for insertion because those are correctly ordered
-            $dateId = $dateIds[$date];
+            while ($position < $lastEol) {
+                $commaPos = strpos($buffer, ',', $position);
 
-            $pathId = $pathIds[$path] ?? null;
-            if ($pathId === null) {
-                $pathId = $pathCount;
-                $pathIds[$path] = $pathId;
-                $paths[$pathId] = $path;
-                $outputData[$pathId] = array_fill(0, $dateCount, 0);
-                $pathCount++;
+                $path = substr($buffer, $position, $commaPos - $position);
+                $position = $commaPos;
+                $date = substr($buffer, $position + 3, 8);
+                $position += 52;
+
+                // use dateIds for insertion because those are correctly ordered
+                $dateId = $dateIds[$date];
+
+                $pathId = $pathIds[$path] ?? null;
+                if ($pathId === null) {
+                    $pathId = $pathCount;
+                    $pathIds[$path] = $pathId;
+                    $paths[$pathId] = $path;
+                    $outputData[$pathId] = array_fill(0, $dateCount, 0);
+                    $pathCount++;
+                }
+
+                $outputData[$pathId][$dateId]++;
             }
-
-            $outputData[$pathId][$dateId]++;
         }
 
         // write output
@@ -90,7 +102,7 @@ final class Parser
                     continue;
                 }
 
-                if (! $firstDate) {
+                if (!$firstDate) {
                     $outputJson .= "," . PHP_EOL;
                 }
                 $date = $dates[$dateId];
