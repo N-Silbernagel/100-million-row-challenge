@@ -54,12 +54,14 @@ final class Parser
             $path = substr($line, 19, -27);
             $date = substr($line, -26, 10);
 
-            $outputData[$path] ??= [];
-
             // use dateIds for insertion because those are correctly ordered
             $dateId = $dateIds[$date];
 
-            $outputData[$path][$dateId] = ($outputData[$path][$dateId] ?? 0) + 1;
+            if (isset($outputData[$path][$dateId])) {
+                $outputData[$path][$dateId]++;
+            } else {
+                $outputData[$path][$dateId] = 1;
+            }
         }
 
         // write output
