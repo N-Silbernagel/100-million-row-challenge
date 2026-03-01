@@ -7,7 +7,6 @@ use function fgets;
 use function file_put_contents;
 use function fopen;
 use function gc_disable;
-use function str_replace;
 use function stream_set_read_buffer;
 use function substr;
 
@@ -45,7 +44,6 @@ final class Parser
 
         $pathIds = [];
         $paths = [];
-        $escapedPaths = [];
         $pathCount = 0;
 
         $outputData = [];
@@ -57,7 +55,7 @@ final class Parser
         while ($line = fgets($input)) {
             // we know url path is 19 chars from left, because host and protocol stay the same
             // and each line ends with ",YYYY-MM-DDTHH:MM:SS+00:00"
-            $path = substr($line, 19, -27);
+            $path = substr($line, 25, -27);
             $date = substr($line, -24, 8);
 
             // use dateIds for insertion because those are correctly ordered
@@ -68,7 +66,6 @@ final class Parser
                 $pathId = $pathCount;
                 $pathIds[$path] = $pathId;
                 $paths[$pathId] = $path;
-                $escapedPaths[$pathId] = str_replace('/', '\/', $path);
                 $outputData[$pathId] = array_fill(0, $dateCount, 0);
                 $pathCount++;
             }
@@ -81,10 +78,9 @@ final class Parser
 
         $totalPathsCount = $pathCount;
         $pathIndex = 0;
-        foreach ($paths as $pathId => $_path) {
+        foreach ($paths as $pathId => $path) {
             $pathCounts = $outputData[$pathId];
-            $escapedPath = $escapedPaths[$pathId];
-            $outputJson .= "    \"$escapedPath\": {" . PHP_EOL;
+            $outputJson .= "    \"\/blog\/$path\": {" . PHP_EOL;
 
             $firstDate = true;
 
