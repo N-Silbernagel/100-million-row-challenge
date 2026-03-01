@@ -29,6 +29,25 @@ final class Parser
             $outputData[$path][$date]++;
         }
 
+        $dates = [];
+        $dateCount = 0;
+        for ($y = 21; $y <= 26; $y++) {
+            for ($m = 1; $m <= 12; $m++) {
+                $maxD = match ($m) {
+                    2 => $y === 24 ? 29 : 28,
+                    4, 6, 9, 11 => 30,
+                    default => 31,
+                };
+                $mStr = ($m < 10 ? '0' : '') . $m;
+                $ymStr = "20{$y}-{$mStr}-";
+                for ($d = 1; $d <= $maxD; $d++) {
+                    $key = $ymStr . (($d < 10 ? '0' : '') . $d);
+                    $dates[$dateCount] = $key;
+                    $dateCount++;
+                }
+            }
+        }
+
         $output = fopen('php://memory', 'w');
 
         fwrite($output, "{" . PHP_EOL);
@@ -39,10 +58,15 @@ final class Parser
             $escapedPath = str_replace('/', '\/', $path);
             fwrite($output, "    \"$escapedPath\": {" . PHP_EOL);
 
-            ksort($pathCounts);
             $totalDatesCount = count($pathCounts);
             $dateIndex = 0;
-            foreach ($pathCounts as $date => $count) {
+
+            foreach ($dates as $date) {
+                $count = $pathCounts[$date] ?? null;
+                if ($count === null) {
+                    continue;
+                }
+
                 fwrite($output, "        \"$date\": $count");
                 if ($dateIndex < $totalDatesCount - 1) {
                     fwrite($output, ",");
