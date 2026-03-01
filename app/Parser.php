@@ -11,6 +11,7 @@ final class Parser
     {
         gc_disable();
 
+        // pre-compute dates
         $dateIds = [];
         $dates = [];
         $dateCount = 0;
@@ -22,7 +23,7 @@ final class Parser
                     default => 31,
                 };
                 $mStr = ($m < 10 ? '0' : '') . $m;
-                $ymStr = "20{$y}-{$mStr}-";
+                $ymStr = "{$y}-{$mStr}-";
                 for ($d = 1; $d <= $maxD; $d++) {
                     $key = $ymStr . (($d < 10 ? '0' : '') . $d);
                     $dateIds[$key] = $dateCount;
@@ -40,18 +41,21 @@ final class Parser
         while ($line = fgets($input)) {
             $commaPos = strpos($line, ',');
 
+            // we know url path is 19 chars from left, because host and protocol stay the same
             $path = substr($line, 19, $commaPos - 19);
-
-            $date = substr($line, $commaPos + 1, 10);
+            // we know the date is the 10 chars after the comma
+            $date = substr($line, $commaPos + 3, 8);
 
             $outputData[$path] ??= [];
 
+            // use dateIds for insertion because those are correctly ordered
             $dateId = $dateIds[$date];
 
             $outputData[$path][$dateId] ??= 0;
             $outputData[$path][$dateId]++;
         }
 
+        // write JSON in memory
         $output = fopen('php://memory', 'w');
 
         fwrite($output, "{" . PHP_EOL);
@@ -71,7 +75,8 @@ final class Parser
                     continue;
                 }
 
-                $date = $dates[$dateId];
+                // reconstruct date from id
+                $date = "20" . $dates[$dateId];
 
                 fwrite($output, "        \"$date\": $count");
                 if ($dateIndex < $totalDatesCount - 1) {
