@@ -11,7 +11,7 @@ use function substr;
 
 final class Parser
 {
-    const int FILE_READ_SIZE = 4_194_304;
+    const int FILE_READ_SIZE = 52_428_800;
 
     /**
      * @throws \DateMalformedStringException
@@ -53,13 +53,13 @@ final class Parser
         $input = fopen($inputPath, 'r');
         stream_set_read_buffer($input, self::FILE_READ_SIZE);
 
-        $position = 25;
         $back = 0;
         while (feof($input) === false) {
+            $position = 25;
             fseek($input, $back, SEEK_CUR);
             $buffer = fread($input, self::FILE_READ_SIZE);
             $lastEol = strrpos($buffer, PHP_EOL);
-            $back = ftell($input) - $lastEol;
+            $back = $lastEol - strlen($buffer) + 1;
 
             while ($position < $lastEol) {
                 $commaPos = strpos($buffer, ',', $position);
