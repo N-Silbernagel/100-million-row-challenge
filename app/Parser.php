@@ -9,7 +9,6 @@ use function fopen;
 use function gc_disable;
 use function str_replace;
 use function stream_set_read_buffer;
-use function strpos;
 use function substr;
 
 final class Parser
@@ -50,12 +49,10 @@ final class Parser
         stream_set_read_buffer($input, 4_194_304);
 
         while ($line = fgets($input)) {
-            $commaPos = strpos($line, ',');
-
             // we know url path is 19 chars from left, because host and protocol stay the same
-            $path = substr($line, 19, $commaPos - 19);
-            // we know the date is the 10 chars after the comma
-            $date = substr($line, $commaPos + 3, 8);
+            // and each line ends with ",YYYY-MM-DDTHH:MM:SS+00:00"
+            $path = substr($line, 19, -27);
+            $date = substr($line, -24, 8);
 
             $outputData[$path] ??= [];
 
