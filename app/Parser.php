@@ -4,12 +4,10 @@ namespace App;
 
 use function count;
 use function fgets;
+use function file_put_contents;
 use function fopen;
-use function fwrite;
 use function gc_disable;
-use function rewind;
 use function str_replace;
-use function stream_copy_to_stream;
 use function stream_set_read_buffer;
 use function strpos;
 use function substr;
@@ -68,15 +66,15 @@ final class Parser
         }
 
         // write JSON in memory
-        $output = fopen('php://memory', 'w');
+        $outputJson = "";
 
-        fwrite($output, "{" . PHP_EOL);
+        $outputJson .= "{" . PHP_EOL;
 
         $totalPathsCount = count($outputData);
         $pathIndex = 0;
         foreach ($outputData as $path => $pathCounts) {
             $escapedPath = str_replace('/', '\/', $path);
-            fwrite($output, "    \"$escapedPath\": {" . PHP_EOL);
+            $outputJson .= "    \"$escapedPath\": {" . PHP_EOL;
 
             $totalDatesCount = count($pathCounts);
             $dateIndex = 0;
@@ -90,28 +88,26 @@ final class Parser
                 // reconstruct date from id
                 $date = "20" . $dates[$dateId];
 
-                fwrite($output, "        \"$date\": $count");
+                $outputJson .= "        \"$date\": $count";
                 if ($dateIndex < $totalDatesCount - 1) {
-                    fwrite($output, ",");
+                    $outputJson .= ",";
                 }
-                fwrite($output, PHP_EOL);
+                $outputJson .= PHP_EOL;
 
                 $dateIndex++;
             }
 
-            fwrite($output, "    }");
+            $outputJson .= "    }";
             if ($pathIndex < $totalPathsCount - 1) {
-                fwrite($output, ",");
+                $outputJson .= ",";
             }
-            fwrite($output, PHP_EOL);
+            $outputJson .= PHP_EOL;
 
             $pathIndex++;
         }
 
-        fwrite($output, "}");
+        $outputJson .= "}";
 
-        rewind($output);
-
-        stream_copy_to_stream($output, fopen($outputPath, 'w'));
+        file_put_contents($outputPath, $outputJson);
     }
 }
