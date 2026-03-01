@@ -32,7 +32,7 @@ final class Parser
                     default => 31,
                 };
                 $mStr = ($m < 10 ? '0' : '') . $m;
-                $ymStr = "{$y}-{$mStr}-";
+                $ymStr = "20{$y}-{$mStr}-";
                 for ($d = 1; $d <= $maxD; $d++) {
                     $key = $ymStr . (($d < 10 ? '0' : '') . $d);
                     $dateIds[$key] = $dateCount;
@@ -52,7 +52,7 @@ final class Parser
             // we know url path is 19 chars from left, because host and protocol stay the same
             // and each line ends with ",YYYY-MM-DDTHH:MM:SS+00:00"
             $path = substr($line, 19, -27);
-            $date = substr($line, -24, 8);
+            $date = substr($line, -26, 10);
 
             $outputData[$path] ??= [];
 
@@ -81,7 +81,7 @@ final class Parser
                 }
 
                 // reconstruct date from id
-                $date = "20" . $dates[$dateId];
+                $date = $dates[$dateId];
 
                 $outputJson .= "        \"$date\": $count";
                 if ($dateIndex < $totalDatesCount - 1) {
