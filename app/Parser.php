@@ -2,6 +2,18 @@
 
 namespace App;
 
+use function count;
+use function fgets;
+use function fopen;
+use function fwrite;
+use function gc_disable;
+use function rewind;
+use function str_replace;
+use function stream_copy_to_stream;
+use function stream_set_read_buffer;
+use function strpos;
+use function substr;
+
 final class Parser
 {
     /**
