@@ -26,6 +26,7 @@ final class Parser
         // pre-compute dates
         $dateIds = [];
         $dates = [];
+        $initialCounts = [];
         $dateCount = 0;
         for ($y = 21; $y <= 26; $y++) {
             for ($m = 1; $m <= 12; $m++) {
@@ -41,6 +42,7 @@ final class Parser
                     $dStr = ($d < 10 ? '0' : '') . $d;
                     $dateIds[$ymStr . $dStr] = $dateCount;
                     $dates[$dateCount] = $fullYmStr . $dStr;
+                    $initialCounts[$dateCount] = 0;
                     $dateCount++;
                 }
             }
@@ -67,7 +69,7 @@ final class Parser
                 if (isset($outputData[$path])) {
                     $outputData[$path][$dateId]++;
                 } else {
-                    $pathCounts = array_fill(0, $dateCount, 0);
+                    $pathCounts = $initialCounts;
                     $pathCounts[$dateId] = 1;
                     $outputData[$path] = $pathCounts;
                     $pathCount++;
@@ -87,7 +89,7 @@ final class Parser
                 if (isset($outputData[$path])) {
                     $outputData[$path][$dateId]++;
                 } else {
-                    $pathCounts = array_fill(0, $dateCount, 0);
+                    $pathCounts = $initialCounts;
                     $pathCounts[$dateId] = 1;
                     $outputData[$path] = $pathCounts;
                     $pathCount++;
