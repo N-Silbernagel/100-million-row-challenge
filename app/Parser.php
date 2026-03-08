@@ -29,21 +29,113 @@ final class Parser
         $initialCounts = [];
         $dateCount = 0;
         for ($y = 21; $y <= 26; $y++) {
-            for ($m = 1; $m <= 12; $m++) {
-                $maxD = match ($m) {
-                    2 => $y === 24 ? 29 : 28,
-                    4, 6, 9, 11 => 30,
-                    default => 31,
-                };
-                $mStr = ($m < 10 ? '0' : '') . $m;
-                $ymStr = "{$y}-{$mStr}-";
-                for ($d = 1; $d <= $maxD; $d++) {
-                    $dStr = ($d < 10 ? '0' : '') . $d;
-                    $dateIds["{$ymStr}{$dStr}"] = $dateCount;
-                    $dates[$dateCount] = "20{$ymStr}{$dStr}";
-                    $initialCounts[$dateCount] = 0;
-                    $dateCount++;
-                }
+            $ymStr = "{$y}-01-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-02-";
+            $maxD = $y === 24 ? 29 : 28;
+            for ($d = 1; $d <= $maxD; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-03-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-04-";
+            for ($d = 1; $d <= 30; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-05-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-06-";
+            for ($d = 1; $d <= 30; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-07-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-08-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-09-";
+            for ($d = 1; $d <= 30; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-10-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-11-";
+            for ($d = 1; $d <= 30; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
+            }
+
+            $ymStr = "{$y}-12-";
+            for ($d = 1; $d <= 31; $d++) {
+                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                $dates[$dateCount] = "20{$ymStr}{$dStr}";
+                $initialCounts[$dateCount] = 0;
+                $dateCount++;
             }
         }
 
