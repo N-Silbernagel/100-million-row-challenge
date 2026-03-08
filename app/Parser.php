@@ -3,9 +3,9 @@
 namespace App;
 
 use function array_fill;
-use function getenv;
 use function file_put_contents;
 use function fopen;
+use function fread;
 use function gc_disable;
 use function strlen;
 use function strpos;
@@ -46,13 +46,9 @@ final class Parser
             }
         }
 
-        $pathIds = [];
-        $paths = [];
         $pathCount = 0;
-
         $outputData = [];
 
-        // parse input
         $input = fopen($inputPath, 'r');
         stream_set_read_buffer($input, self::FILE_READ_SIZE);
 
@@ -63,21 +59,19 @@ final class Parser
 
             while (($lineEnd = strpos($buffer, PHP_EOL, $position)) !== false) {
                 $lineLength = $lineEnd - $position;
+
                 $path = substr($buffer, $position + 25, $lineLength - 51);
                 $date = substr($buffer, $lineEnd - 23, 8);
-
                 $dateId = $dateIds[$date];
 
-                $pathId = $pathIds[$path] ?? null;
-                if ($pathId === null) {
-                    $pathId = $pathCount;
-                    $pathIds[$path] = $pathId;
-                    $paths[$pathId] = $path;
-                    $outputData[$pathId] = array_fill(0, $dateCount, 0);
+                if (isset($outputData[$path])) {
+                    $outputData[$path][$dateId]++;
+                } else {
+                    $pathCounts = array_fill(0, $dateCount, 0);
+                    $pathCounts[$dateId] = 1;
+                    $outputData[$path] = $pathCounts;
                     $pathCount++;
                 }
-
-                $outputData[$pathId][$dateId]++;
                 $position = $lineEnd + 1;
             }
 
@@ -89,32 +83,26 @@ final class Parser
             $path = substr($carry, 25, $lineLength - 51);
             $date = substr($carry, $lineLength - 23, 8);
             $dateId = $dateIds[$date] ?? null;
-
             if ($dateId !== null) {
-                $pathId = $pathIds[$path] ?? null;
-                if ($pathId === null) {
-                    $pathId = $pathCount;
-                    $pathIds[$path] = $pathId;
-                    $paths[$pathId] = $path;
-                    $outputData[$pathId] = array_fill(0, $dateCount, 0);
+                if (isset($outputData[$path])) {
+                    $outputData[$path][$dateId]++;
+                } else {
+                    $pathCounts = array_fill(0, $dateCount, 0);
+                    $pathCounts[$dateId] = 1;
+                    $outputData[$path] = $pathCounts;
                     $pathCount++;
                 }
-
-                $outputData[$pathId][$dateId]++;
             }
         }
 
-        // write output
         $outputJson = "{" . PHP_EOL;
 
         $totalPathsCount = $pathCount;
         $pathIndex = 0;
-        foreach ($paths as $pathId => $path) {
-            $pathCounts = $outputData[$pathId];
+        foreach ($outputData as $path => $pathCounts) {
             $outputJson .= "    \"\/blog\/$path\": {" . PHP_EOL;
 
             $firstDate = true;
-
             for ($dateId = 0; $dateId < $dateCount; $dateId++) {
                 $count = $pathCounts[$dateId];
                 if ($count === 0) {
@@ -130,7 +118,6 @@ final class Parser
             }
 
             $outputJson .= PHP_EOL;
-
             $outputJson .= "    }";
             if ($pathIndex < $totalPathsCount - 1) {
                 $outputJson .= ",";
