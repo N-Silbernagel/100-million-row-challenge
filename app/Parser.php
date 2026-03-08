@@ -37,11 +37,10 @@ final class Parser
                 };
                 $mStr = ($m < 10 ? '0' : '') . $m;
                 $ymStr = "{$y}-{$mStr}-";
-                $fullYmStr = "20{$y}-{$mStr}-";
                 for ($d = 1; $d <= $maxD; $d++) {
                     $dStr = ($d < 10 ? '0' : '') . $d;
-                    $dateIds[$ymStr . $dStr] = $dateCount;
-                    $dates[$dateCount] = $fullYmStr . $dStr;
+                    $dateIds["{$ymStr}{$dStr}"] = $dateCount;
+                    $dates[$dateCount] = "20{$ymStr}{$dStr}";
                     $initialCounts[$dateCount] = 0;
                     $dateCount++;
                 }
