@@ -31,7 +31,7 @@ final class Parser
         for ($y = 21; $y <= 26; $y++) {
             $ymStr = "{$y}-01-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -41,7 +41,7 @@ final class Parser
             $ymStr = "{$y}-02-";
             $maxD = $y === 24 ? 29 : 28;
             for ($d = 1; $d <= $maxD; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -50,7 +50,7 @@ final class Parser
 
             $ymStr = "{$y}-03-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -59,7 +59,7 @@ final class Parser
 
             $ymStr = "{$y}-04-";
             for ($d = 1; $d <= 30; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -68,7 +68,7 @@ final class Parser
 
             $ymStr = "{$y}-05-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -77,7 +77,7 @@ final class Parser
 
             $ymStr = "{$y}-06-";
             for ($d = 1; $d <= 30; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -86,7 +86,7 @@ final class Parser
 
             $ymStr = "{$y}-07-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -95,7 +95,7 @@ final class Parser
 
             $ymStr = "{$y}-08-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -104,7 +104,7 @@ final class Parser
 
             $ymStr = "{$y}-09-";
             for ($d = 1; $d <= 30; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -113,7 +113,7 @@ final class Parser
 
             $ymStr = "{$y}-10-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -122,7 +122,7 @@ final class Parser
 
             $ymStr = "{$y}-11-";
             for ($d = 1; $d <= 30; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
@@ -131,7 +131,7 @@ final class Parser
 
             $ymStr = "{$y}-12-";
             for ($d = 1; $d <= 31; $d++) {
-                $dStr = ($d < 10 ? '0' : '') . $d;
+                $dStr = $d < 10 ? "0$d" : $d;
                 $dateIds["{$ymStr}{$dStr}"] = $dateCount;
                 $dates[$dateCount] = "20{$ymStr}{$dStr}";
                 $initialCounts[$dateCount] = 0;
